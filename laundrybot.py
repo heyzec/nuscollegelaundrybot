@@ -270,18 +270,18 @@ def cancel(bot, update):
     return ConversationHandler.END
 
 
-def autonotify(bot):
-    # auto notify queue 
-    return 
+#def autonotify(bot):
+#    # auto notify queue 
+#    return 
 
 
 def main(): 
     updater = Updater(TELEGRAM_TOKEN)    
     # get job queue
-    job_queue = updater.job_queue    
+    #job_queue = updater.job_queue    
     
     # keep notifying queue on 
-    job_queue.run_repeating(autonotify, interval=60, first=60) 
+    #job_queue.run_repeating(autonotify, interval=60, first=60) 
       
     # dispatcher to register handlers
     dispatcher = updater.dispatcher
