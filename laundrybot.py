@@ -72,32 +72,38 @@ DATA_STORE = {}
 (AFTER_START, MENU, AFTER_METHOD, SELECT_LEVEL, NEAREST) = range(5)
 
 def start(bot, update):
+    button_list = [InlineKeyboardButton(text='Check Machine Status', callback_data = 'checkstart'),
+                   InlineKeyboardButton(text='Settings', callback_data = 'settings'),
+                   InlineKeyboardButton(text='Help', callback_data = 'help')]
+    menu = build_menu(button_list, n_cols = 1)
+    mainmenutext = "<b>Hello!</b>\n\n"
+    mainmenutext += "I am RC4's Laundry Machine Bot. Check status, adjust notifications, and more!"
+    
     try:
         user = update.message.from_user
-        chatid = update.message.chat.id
         logger.info(update.message.text.strip())
         INFO_STORE[user.id] = {}
         INFO_STORE[user.id]["level"] = {}
         INFO_STORE[user.id]["settings"] = {}
         INFO_STORE[user.id]["settings"]['notification'] = {}
+        logger.info("User {} just started conversation.".format(user.username if user.username else user.first_name))
+        
+        bot.sendMessage(text = mainmenutext, 
+                        chat_id = update.message.chat.id,
+                        reply_markup = InlineKeyboardMarkup(menu),
+                        parse_mode=ParseMode.HTML)
         
     except AttributeError:
         query = update.callback_query
         user = query.from_user
-        chatid = query.message.chat.id
         logger.info("User {} clicked back to main menu".format(user.username if user.username else user.first_name))
 
-    button_list = [InlineKeyboardButton(text='Check Machine Status', callback_data = 'checkstart'),
-                   InlineKeyboardButton(text='Settings', callback_data = 'settings'),
-                   InlineKeyboardButton(text='Help', callback_data = 'help')]
-    menu = build_menu(button_list, n_cols = 1)
-    mainmenutext = "<b>Hello {}!</b>\n\n".format(user.username if user.username else user.first_name)
-    mainmenutext += "I am RC4's Laundry Machine Bot. Check status, adjust notifications, and more!"
+        bot.editMessageText(text = mainmenutext, 
+                        chat_id =  query.message.chat.id,
+                        message_id=query.message.message_id,
+                        reply_markup = InlineKeyboardMarkup(menu),
+                        parse_mode=ParseMode.HTML)
     
-    update.message.reply_text(text = mainmenutext, 
-                              chat_id = chatid,
-                              reply_markup = InlineKeyboardMarkup(menu),
-                              parse_mode=ParseMode.HTML)
     return AFTER_START
 
 def select_method(bot, update):
