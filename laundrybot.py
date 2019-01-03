@@ -253,6 +253,16 @@ def helpfaq(bot, update):
                         parse_mode=ParseMode.HTML)
     return MENU
 
+def cancel(bot, update):
+    user = update.message.from_user
+    chatid = update.message.chat.id
+    logger.info("User {} has cancelled the conversation.".format(user.username if user.username else user.first_name))
+        
+    bot.send_message(text = "Bye! See you soon! Press /start to restart.",
+                     chat_id=chatid,
+                     parse_mode=ParseMode.HTML)
+    return ConversationHandler.END
+
 
 def autonotify(bot):
     # auto notify queue 
@@ -293,6 +303,8 @@ def main():
                     NEAREST: [CallbackQueryHandler(callback = nearest_levels, pattern = '^((?!back).)*$'),
                               CallbackQueryHandler(callback = select_method, pattern = '^(back)$')]},
                               
+            fallbacks = [CommandHandler('cancel', cancel)],
+            
             allow_reentry = True
         )
     
