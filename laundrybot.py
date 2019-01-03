@@ -155,7 +155,7 @@ def pinned_level(bot, update):
     pinned_level = int(query.data[1:])
     
     reply_text = "On Level {}, here are the statuses of the 4 laundry machines:".format(str(pinned_level))
-    reply_text += "-- <b>Wash 1</b> --- <b>Wash 2</b> --- <b>Dry 1</b> --- <b>Dry 2</b> --"
+    reply_text += "\n\n-- <b>Wash 1</b> --- <b>Wash 2</b> --- <b>Dry 1</b> --- <b>Dry 2</b> --"
     reply_text += "\n STATUS01         STATUS02          STATUS03          STATUS04  "
     reply_text += "\n\nPress /start if you wish to restart the whole process anytime!"
         
@@ -211,8 +211,8 @@ def nearest_levels(bot, update):
     nearest_level = min(laundry_levels, key=lambda x:abs(x-current_level))
     
     reply_text = "Here are the respective statuses of laundry machines nearest to your level ({}):".format(str(current_level))
-    reply_text += "<b>Level {}</b>".format(str(nearest_level))
-    reply_text += "-- <b>Wash 1</b> --- <b>Wash 2</b> --- <b>Dry 1</b> --- <b>Dry 2</b> --"
+    reply_text += "\n\n<b>Level {}</b>".format(str(nearest_level))
+    reply_text += "\n\n-- <b>Wash 1</b> --- <b>Wash 2</b> --- <b>Dry 1</b> --- <b>Dry 2</b> --"
     reply_text += "\n STATUS01         STATUS02          STATUS03          STATUS04  "
     reply_text += "\n\nPress /start if you wish to restart the whole process anytime!"
         
