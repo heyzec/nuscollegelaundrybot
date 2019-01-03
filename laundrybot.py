@@ -11,7 +11,7 @@ import logging
 import os
 from telegram import InlineKeyboardMarkup, InlineKeyboardButton, ParseMode
 from telegram.ext import Updater, CommandHandler, ConversationHandler, CallbackQueryHandler
-from emoji import emojize
+#from emoji import emojize
 
 #Set up telegram token 
 TELEGRAM_TOKEN = os.environ['RC4LAUNDRYBOT_TOKEN'] 
@@ -35,15 +35,15 @@ def build_menu(buttons, n_cols, header_buttons = None, footer_buttons = None):
     return menu
 
 # building emojis for every occasion
-ethumb = emojize(":thumbsup: ", use_aliases=True)
-eblacksquare = emojize(":black_small_square: ", use_aliases=True)
-earrowfwd = emojize(":arrow_forward: ", use_aliases=True)
-ebangbang = emojize(":bangbang: ", use_aliases=True)
-eheart = emojize(":heart: ", use_aliases=True)
-enumber1 = emojize(":one: ", use_aliases=True)
-enumber2 = emojize(":two: ", use_aliases=True)
-enumber3 = emojize(":three: ", use_aliases=True)
-ebluediamond = emojize(":small_blue_diamond: ", use_aliases=True)
+#ethumb = emojize(":thumbsup: ", use_aliases=True)
+#eblacksquare = emojize(":black_small_square: ", use_aliases=True)
+#earrowfwd = emojize(":arrow_forward: ", use_aliases=True)
+#ebangbang = emojize(":bangbang: ", use_aliases=True)
+#eheart = emojize(":heart: ", use_aliases=True)
+#enumber1 = emojize(":one: ", use_aliases=True)
+#enumber2 = emojize(":two: ", use_aliases=True)
+#enumber3 = emojize(":three: ", use_aliases=True)
+#ebluediamond = emojize(":small_blue_diamond: ", use_aliases=True)
 
 
 """
