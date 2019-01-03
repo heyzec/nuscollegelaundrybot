@@ -1,10 +1,8 @@
 # -*- coding: utf-8 -*-
 """
 Created on Wed Oct 24 22:05:36 2018
-
 @author: PengFei
 """
-
 # LaundryMachineBot implementation using python telegram bot library 
 
 #import time
