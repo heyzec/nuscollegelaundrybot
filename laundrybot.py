@@ -159,7 +159,7 @@ def pinned_level(bot, update):
     
     pinned_level = int(query.data[1:])
     URLfloor = URLrc + str(pinned_level)
-    jsonstatuses = requests.get(URLfloor).json()
+    data = requests.get(URLfloor).json()
     statuses = [data['washer1'], data['washer2'], data['dryer1'], data['dryer2']]
     machines = ['Washer 1', 'Washer 2', 'Dryer 1', 'Dryer 2']
 
@@ -223,7 +223,7 @@ def nearest_levels(bot, update):
     nearest_level = min(laundry_levels, key=lambda x:abs(x-current_level))
 
     URLfloor = URLrc + str(nearest_level)
-    jsonstatuses = requests.get(URLfloor).json()
+    data = requests.get(URLfloor).json()
     statuses = [data['washer1'], data['washer2'], data['dryer1'], data['dryer2']]
     machines = ['Washer 1', 'Washer 2', 'Dryer 1', 'Dryer 2']
     
