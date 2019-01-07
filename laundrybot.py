@@ -158,7 +158,7 @@ def pinned_level(bot, update):
     machines = ['Washer 1', 'Washer 2', 'Dryer 1', 'Dryer 2']
 
     reply_text = "On Level {}, here are the statuses of the 4 laundry machines:".format(str(pinned_level))
-    for i in statuses:
+    for i in range(len(statuses)):
         if statuses[i] == 1:
             reply_text += "\n\n" + etick + machines[i]
         elif statuses[i] == 0:
@@ -222,7 +222,7 @@ def nearest_levels(bot, update):
     
     reply_text = "Here are the respective statuses of laundry machines nearest to your level ({}):".format(str(current_level))
     reply_text = "\n\nOn Level {}, here are the statuses of the 4 laundry machines:".format(str(nearest_level))
-    for i in statuses:
+    for i in range(len(statuses)):
         if statuses[i] == 1:
             reply_text += "\n\n" + etick + machines[i]
         elif statuses[i] == 0:
