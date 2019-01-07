@@ -216,7 +216,6 @@ def nearest_levels(bot, update):
     laundry_levels = [5, 8, 11, 14, 17]
     nearest_level = min(laundry_levels, key=lambda x:abs(x-current_level))
 
-    pinned_level = int(query.data[1:])
     statuses = [1, 1, 0, 1]
     machines = ['Washer 1', 'Washer 2', 'Dryer 1', 'Dryer 2']
     
