@@ -11,7 +11,7 @@ import logging
 import os
 from telegram import InlineKeyboardMarkup, InlineKeyboardButton, ParseMode
 from telegram.ext import Updater, CommandHandler, ConversationHandler, CallbackQueryHandler
-#from emoji import emojize
+from emoji import emojize
 
 #Set up telegram token 
 TELEGRAM_TOKEN = os.environ['RC4LAUNDRYBOT_TOKEN'] 
@@ -44,7 +44,8 @@ def build_menu(buttons, n_cols, header_buttons = None, footer_buttons = None):
 #enumber2 = emojize(":two: ", use_aliases=True)
 #enumber3 = emojize(":three: ", use_aliases=True)
 #ebluediamond = emojize(":small_blue_diamond: ", use_aliases=True)
-
+etick = emojize(":white_check_mark: ", use_aliases=True)
+ecross = emojize(":x: ", use_aliases=True)
 
 """
 check status
@@ -153,10 +154,15 @@ def pinned_level(bot, update):
     logger.info("Returning 4 pinned laundry machine statuses to: User {}".format(user.username if user.username else user.first_name))
     
     pinned_level = int(query.data[1:])
-    
+    statuses = [1, 1, 0, 1]
+    machines = ['Washer 1', 'Washer 2', 'Dryer 1', 'Dryer 2']
+
     reply_text = "On Level {}, here are the statuses of the 4 laundry machines:".format(str(pinned_level))
-    reply_text += "\n\n-- <b>Wash 1</b> --- <b>Wash 2</b> --- <b>Dry 1</b> --- <b>Dry 2</b> --"
-    reply_text += "\n STATUS01         STATUS02          STATUS03          STATUS04  "
+    for i in statuses:
+        if statuses[i] == 1:
+            reply_text += "\n\n" + etick + machines[i]
+        elif statuses[i] == 0:
+            reply_text += "\n\n" + ecross + machines[i]
     reply_text += "\n\nPress /start if you wish to restart the whole process anytime!"
         
     bot.editMessageText(text = reply_text,
@@ -209,11 +215,18 @@ def nearest_levels(bot, update):
     current_level = int(query.data[1:])
     laundry_levels = [5, 8, 11, 14, 17]
     nearest_level = min(laundry_levels, key=lambda x:abs(x-current_level))
+
+    pinned_level = int(query.data[1:])
+    statuses = [1, 1, 0, 1]
+    machines = ['Washer 1', 'Washer 2', 'Dryer 1', 'Dryer 2']
     
     reply_text = "Here are the respective statuses of laundry machines nearest to your level ({}):".format(str(current_level))
-    reply_text += "\n\n<b>Level {}</b>".format(str(nearest_level))
-    reply_text += "\n\n-- <b>Wash 1</b> --- <b>Wash 2</b> --- <b>Dry 1</b> --- <b>Dry 2</b> --"
-    reply_text += "\n STATUS01         STATUS02          STATUS03          STATUS04  "
+    reply_text = "\n\nOn Level {}, here are the statuses of the 4 laundry machines:".format(str(nearest_level))
+    for i in statuses:
+        if statuses[i] == 1:
+            reply_text += "\n\n" + etick + machines[i]
+        elif statuses[i] == 0:
+            reply_text += "\n\n" + ecross + machines[i]
     reply_text += "\n\nPress /start if you wish to restart the whole process anytime!"
         
     bot.editMessageText(text = reply_text,
