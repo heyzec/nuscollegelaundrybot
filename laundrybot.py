@@ -12,6 +12,7 @@ import os
 from telegram import InlineKeyboardMarkup, InlineKeyboardButton, ParseMode
 from telegram.ext import Updater, CommandHandler, ConversationHandler, CallbackQueryHandler
 from emoji import emojize
+import requests
 
 #Set up telegram token 
 TELEGRAM_TOKEN = os.environ['RC4LAUNDRYBOT_TOKEN'] 
@@ -68,6 +69,9 @@ INFO_STORE = {}
 
 # set up DATA_STORE for laundry machine status 
 DATA_STORE = {}
+
+# set up firebase URL links for each RC
+URLrc = "https://us-central1-rc4laundrybot.cloudfunctions.net/readData/RC4-"
 
 # define states 
 (AFTER_START, MENU, AFTER_METHOD, SELECT_LEVEL, NEAREST) = range(5)
@@ -154,14 +158,16 @@ def pinned_level(bot, update):
     logger.info("Returning 4 pinned laundry machine statuses to: User {}".format(user.username if user.username else user.first_name))
     
     pinned_level = int(query.data[1:])
-    statuses = [1, 1, 0, 1]
+    URLfloor = URLrc + str(pinned_level)
+    jsonstatuses = requests.get(URLfloor).json()
+    statuses = [data['washer1'], data['washer2'], data['dryer1'], data['dryer2']]
     machines = ['Washer 1', 'Washer 2', 'Dryer 1', 'Dryer 2']
 
     reply_text = "On Level {}, here are the statuses of the 4 laundry machines:".format(str(pinned_level))
     for i in range(len(statuses)):
-        if statuses[i] == 1:
+        if statuses[i] == True:
             reply_text += "\n\n" + etick + machines[i]
-        elif statuses[i] == 0:
+        elif statuses[i] == False:
             reply_text += "\n\n" + ecross + machines[i]
     reply_text += "\n\nPress /start if you wish to restart the whole process anytime!"
         
@@ -216,15 +222,17 @@ def nearest_levels(bot, update):
     laundry_levels = [5, 8, 11, 14, 17]
     nearest_level = min(laundry_levels, key=lambda x:abs(x-current_level))
 
-    statuses = [1, 1, 0, 1]
+    URLfloor = URLrc + str(nearest_level)
+    jsonstatuses = requests.get(URLfloor).json()
+    statuses = [data['washer1'], data['washer2'], data['dryer1'], data['dryer2']]
     machines = ['Washer 1', 'Washer 2', 'Dryer 1', 'Dryer 2']
     
     reply_text = "Here are the respective statuses of laundry machines nearest to your level ({}):".format(str(current_level))
     reply_text = "\n\nOn Level {}, here are the statuses of the 4 laundry machines:".format(str(nearest_level))
     for i in range(len(statuses)):
-        if statuses[i] == 1:
+        if statuses[i] == True:
             reply_text += "\n\n" + etick + machines[i]
-        elif statuses[i] == 0:
+        elif statuses[i] == False:
             reply_text += "\n\n" + ecross + machines[i]
     reply_text += "\n\nPress /start if you wish to restart the whole process anytime!"
         
