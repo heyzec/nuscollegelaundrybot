@@ -46,7 +46,7 @@ ecross = emojize(":x: ", use_aliases=True)
 
 # start command initializes: 
 def check_handler(bot, update, user_data):
-    logger.info("User: {} has started conversation with bot.".format(user = update.message.from_user.username else user = update.message.from_user.first_name))
+    logger.info("User: {} has started conversation with bot.".format(update.message.from_user.username else update.message.from_user.first_name))
     if 'pinned_level' in user_data:
         level_status(bot, update, user_data,
                      from_pinned_level=True, new_message=True)
