@@ -135,7 +135,7 @@ def main():
     #NAME = 'laundry-bot-beta'
     #PORT = os.environ.get('PORT')
 
-    updater = Updater(TOKEN)s
+    updater = Updater(TOKEN)
     dp = updater.dispatcher
 
     dp.add_handler(CommandHandler('start', check_handler, pass_user_data=True))
