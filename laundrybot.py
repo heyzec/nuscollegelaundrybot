@@ -40,11 +40,13 @@ def build_menu(buttons, n_cols, header_buttons=None, footer_buttons=None):
 # enumber1 = emojize(":one: ", use_aliases=True)
 # enumber2 = emojize(":two: ", use_aliases=True)
 # enumber3 = emojize(":three: ", use_aliases=True)
-# ebluediamond = emojize(":small_blue_diamond: ", use_aliases=True)
+ebluediamond = emojize(":small_blue_diamond: ", use_aliases=True)
 etick = emojize(":white_check_mark: ", use_aliases=True)
 ecross = emojize(":x: ", use_aliases=True)
 
+# start command initializes: 
 def check_handler(bot, update, user_data):
+    logger.info("User: {} has started conversation with bot.".format(user = update.message.from_user.username else user = update.message.from_user.first_name))
     if 'pinned_level' in user_data:
         level_status(bot, update, user_data,
                      from_pinned_level=True, new_message=True)
@@ -52,14 +54,13 @@ def check_handler(bot, update, user_data):
         ask_level(bot, update)
 
 def ask_level(bot, update):  
-    level_text = "Which laundry floor is the nearest to you?"
+    level_text = "Which laundry level do you wish to check?"
     level_buttons = []
     for level in LAUNDRY_LEVELS:
         label = 'Level {}'.format(level)
         data = 'set_L{}'.format(level)
-        buttons = InlineKeyboardButton(text=label, callback_data=data)
+        buttons = InlineKeyboardButton(text=label, callback_data=data) # data callback to set_pinned_level
         level_buttons.append(buttons)
-    
     update.message.reply_text(text=level_text,
                               reply_markup=build_menu(level_buttons, 1))
 
@@ -80,9 +81,9 @@ def make_status_text(level_number):
         laundry_data += '{} {}\n'.format(status_emoji, machine_name)
     current_time = datetime.now().strftime('%d %B %Y %H:%M:%S')
 
-    return "Here are the statuses for Level {}:\n\n" \
+    return "<b>Showing Statuses for Level {}</b>:\n\n" \
            "{}\n" \
-           "Last updated on {}\n".format(level_number, laundry_data, current_time)
+           "Last updated: {}\n".format(level_number, laundry_data, current_time)
 
 def make_status_menu(level_number):
     level_buttons = []
@@ -91,7 +92,8 @@ def make_status_menu(level_number):
         label = 'L{}'.format(level)
         data = 'check_L{}'.format(level)
         if level == level_number:
-            label = u'\u2022 ' + label + u' \u2022'
+        #    label = u'\u2022 ' + label + u' \u2022'
+            label = ebluediamond + label
         
         button = InlineKeyboardButton(text=label, callback_data=data)
         level_buttons.append(button)
@@ -122,13 +124,15 @@ def level_status(bot, update, user_data, from_pinned_level=False, new_message=Fa
                               message_id=query.message.message_id,
                               reply_markup=make_status_menu(level))
 
+    logger.info("Level status text is edited for user: {}".format(query.from_user.username else query.from_user.first_name))
+
 def error(bot, update, error):
     logger.warning('Update "%s" caused error "%s"', update, error)
 
 def main():
     TOKEN = os.environ['RC4LAUNDRYBOT_TOKEN']
-    NAME = 'laundry-bot-beta'
-    PORT = os.environ.get('PORT')
+    #NAME = 'laundry-bot-beta'
+    #PORT = os.environ.get('PORT')
 
     updater = Updater(TOKEN)
     dp = updater.dispatcher
@@ -142,8 +146,9 @@ def main():
                                         pass_user_data=True))
     dp.add_error_handler(error)
 
-    updater.start_webhook(listen="0.0.0.0", port=int(PORT), url_path=TOKEN)
-    updater.bot.setWebhook("https://{}.herokuapp.com/{}".format(NAME, TOKEN))
+    #updater.start_webhook(listen="0.0.0.0", port=int(PORT), url_path=TOKEN)
+    #updater.bot.setWebhook("https://{}.herokuapp.com/{}".format(NAME, TOKEN))
+    updater.start_polling()
     updater.idle()
 
 if __name__ == '__main__':
