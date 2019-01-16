@@ -46,8 +46,8 @@ ecross = emojize(":x: ", use_aliases=True)
 
 # start command initializes: 
 def check_handler(bot, update, user_data):
-    #user = update.message.from_user
-    #logger.info("User: {}".format(user.username else user.first_name))
+    user = update.message.from_user
+    logger.info("User: {} has started conversation with bot.".format(user.username if user.username else user.first_name))
     if 'pinned_level' in user_data:
         level_status(bot, update, user_data,
                      from_pinned_level=True, new_message=True)
@@ -108,7 +108,7 @@ def make_status_menu(level_number):
 
 def level_status(bot, update, user_data, from_pinned_level=False, new_message=False):
     query = update.callback_query
-
+    user = query.from_user
     if from_pinned_level:
         level = user_data['pinned_level']
     else:
@@ -124,8 +124,8 @@ def level_status(bot, update, user_data, from_pinned_level=False, new_message=Fa
                               chat_id=query.message.chat_id,
                               message_id=query.message.message_id,
                               reply_markup=make_status_menu(level))
-
-    logger.info("Level status text is edited for user: {}".format(query.from_user.username else query.from_user.first_name))
+        
+    logger.info("Level status text is edited for user: {}".format(user.username if user.username else user.first_name))
 
 def error(bot, update, error):
     logger.warning('Update "%s" caused error "%s"', update, error)
