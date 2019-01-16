@@ -55,7 +55,7 @@ def check_handler(bot, update, user_data):
         ask_level(bot, update)
 
 def ask_level(bot, update):  
-    level_text = "Which laundry level do you wish to check?"
+    level_text = "Heyyo! I am RC4's Laundry Bot.\n\n<b>Which laundry level do you wish to check?</b>"
     level_buttons = []
     for level in LAUNDRY_LEVELS:
         label = 'Level {}'.format(level)
@@ -63,7 +63,8 @@ def ask_level(bot, update):
         buttons = InlineKeyboardButton(text=label, callback_data=data) # data callback to set_pinned_level
         level_buttons.append(buttons)
     update.message.reply_text(text=level_text,
-                              reply_markup=build_menu(level_buttons, 1))
+                              reply_markup=build_menu(level_buttons, 1),
+                              parse_mode=ParseMode.HTML)
 
 def set_pinned_level(bot, update, user_data):
     query = update.callback_query
@@ -84,7 +85,7 @@ def make_status_text(level_number):
 
     return "<b>Showing Statuses for Level {}</b>:\n\n" \
            "{}\n" \
-           "Last updated: {}\n".format(level_number, laundry_data, current_time)
+           "Last Updated: {}\n".format(level_number, laundry_data, current_time)
 
 def make_status_menu(level_number):
     level_buttons = []
@@ -108,7 +109,6 @@ def make_status_menu(level_number):
 
 def level_status(bot, update, user_data, from_pinned_level=False, new_message=False):
     query = update.callback_query
-    user = query.from_user
     if from_pinned_level:
         level = user_data['pinned_level']
     else:
@@ -118,15 +118,15 @@ def level_status(bot, update, user_data, from_pinned_level=False, new_message=Fa
 
     if new_message:
         update.message.reply_text(text=make_status_text(level),
-                                  reply_markup=make_status_menu(level))
+                                  reply_markup=make_status_menu(level),
+                                  parse_mode=ParseMode.HTML)
     else:
         bot.edit_message_text(text=make_status_text(level),
                               chat_id=query.message.chat_id,
                               message_id=query.message.message_id,
-                              reply_markup=make_status_menu(level))
+                              reply_markup=make_status_menu(level),
+                              parse_mode=ParseMode.HTML)  
         
-    logger.info("Level status text is edited for user: {}".format(user.username if user.username else user.first_name))
-
 def error(bot, update, error):
     logger.warning('Update "%s" caused error "%s"', update, error)
 
@@ -135,7 +135,7 @@ def main():
     #NAME = 'laundry-bot-beta'
     #PORT = os.environ.get('PORT')
 
-    updater = Updater(TOKEN)
+    updater = Updater(TOKEN)s
     dp = updater.dispatcher
 
     dp.add_handler(CommandHandler('start', check_handler, pass_user_data=True))
