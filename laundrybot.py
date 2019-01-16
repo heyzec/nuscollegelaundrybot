@@ -46,7 +46,8 @@ ecross = emojize(":x: ", use_aliases=True)
 
 def check_handler(bot, update, user_data):
     if 'pinned_level' in user_data:
-        level_status(bot, update, user_data, from_pinned_level=True)
+        level_status(bot, update, user_data,
+                     from_pinned_level=True, new_message=True)
     else:
         ask_level(bot, update)
 
@@ -102,7 +103,7 @@ def make_status_menu(level_number):
 
     return build_menu(level_buttons, 5, footer_buttons=refresh_button)
 
-def level_status(bot, update, user_data, from_pinned_level=False):
+def level_status(bot, update, user_data, from_pinned_level=False, new_message=False):
     query = update.callback_query
 
     if from_pinned_level:
@@ -112,10 +113,14 @@ def level_status(bot, update, user_data, from_pinned_level=False):
     
     user_data['check_level'] = level
 
-    bot.edit_message_text(text=make_status_text(level),
-                            chat_id=query.message.chat_id,
-                            message_id=query.message.message_id,
-                            reply_markup=make_status_menu(level))
+    if new_message:
+        update.message.reply_text(text=make_status_text(level),
+                                  reply_markup=make_status_menu(level))
+    else:
+        bot.edit_message_text(text=make_status_text(level),
+                              chat_id=query.message.chat_id,
+                              message_id=query.message.message_id,
+                              reply_markup=make_status_menu(level))
 
 def error(bot, update, error):
     logger.warning('Update "%s" caused error "%s"', update, error)
@@ -128,7 +133,7 @@ def main():
     updater = Updater(TOKEN)
     dp = updater.dispatcher
 
-    dp.add_handler(CommandHandler('start', ask_level))
+    dp.add_handler(CommandHandler('start', check_handler, pass_user_data=True))
     dp.add_handler(CallbackQueryHandler(set_pinned_level,
                                         pattern='^set_L(5|8|11|14|17)$',
                                         pass_user_data=True))
