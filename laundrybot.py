@@ -43,7 +43,8 @@ def build_menu(buttons, n_cols, header_buttons=None, footer_buttons=None):
 ebluediamond = emojize(":small_blue_diamond: ", use_aliases=True)
 etick = emojize(":white_check_mark: ", use_aliases=True)
 ecross = emojize(":x: ", use_aliases=True)
-ealmostdone = emojize (":hourglass_flowing_sand:", use_aliases=True)
+ealmostdone = emojize (":hourglass:", use_aliases=True)
+eworking = emojize (":hourglass_flowing_sand:", use_aliases=True)
 
 # start command initializes: 
 def check_handler(bot, update, user_data):
@@ -82,7 +83,7 @@ def make_status_text(level_number):
         if (machine_status[machine_id] == 0):
           status_emoji = etick
         elif (machine_status[machine_id] == 1):
-          status_emoji = ecross
+          status_emoji = eworking
         else:
           status_emoji = ealmostdone
         machine_name = MACHINES_INFO[machine_id]
