@@ -32,17 +32,10 @@ def build_menu(buttons, n_cols, header_buttons=None, footer_buttons=None):
     return InlineKeyboardMarkup(menu)
 
 # Building emojis for every occasion
-# ethumb = emojize(":thumbsup: ", use_aliases=True)
-# eblacksquare = emojize(":black_small_square: ", use_aliases=True)
-# earrowfwd = emojize(":arrow_forward: ", use_aliases=True)
-# ebangbang = emojize(":bangbang: ", use_aliases=True)
-# eheart = emojize(":heart: ", use_aliases=True)
-# enumber1 = emojize(":one: ", use_aliases=True)
-# enumber2 = emojize(":two: ", use_aliases=True)
-# enumber3 = emojize(":three: ", use_aliases=True)
 ebluediamond = emojize(":small_blue_diamond: ", use_aliases=True)
 etick = emojize(":white_check_mark: ", use_aliases=True)
 ecross = emojize(":x: ", use_aliases=True)
+esoon = emojize(":soon: ", use_aliases=True)
 
 # start command initializes: 
 def check_handler(bot, update, user_data):
@@ -78,7 +71,12 @@ def make_status_text(level_number):
     floor_url = RC_URL + str(level_number)
     machine_status = requests.get(floor_url).json()
     for machine_id in MACHINES_INFO:
-        status_emoji = etick if machine_status[machine_id] else ecross
+        if machine_status[machine_id] == 0:
+            status_emoji = etick
+        elif machine_status[machine_id] == 1:
+            status_emoji = ecross
+        else:
+            status_emoji = esoon
         machine_name = MACHINES_INFO[machine_id]
         laundry_data += '{} {}\n'.format(status_emoji, machine_name)
     current_time = datetime.now().strftime('%d %B %Y %H:%M:%S')
@@ -132,8 +130,8 @@ def error(bot, update, error):
 
 def main():
     TOKEN = os.environ['RC4LAUNDRYBOT_TOKEN']
-    #NAME = 'laundry-bot-beta'
-    #PORT = os.environ.get('PORT')
+    NAME = 'nuscollegelaundrybot'
+    PORT = os.environ.get('PORT')
 
     updater = Updater(TOKEN)
     dp = updater.dispatcher
@@ -147,8 +145,8 @@ def main():
                                         pass_user_data=True))
     dp.add_error_handler(error)
 
-    #updater.start_webhook(listen="0.0.0.0", port=int(PORT), url_path=TOKEN)
-    #updater.bot.setWebhook("https://{}.herokuapp.com/{}".format(NAME, TOKEN))
+    updater.start_webhook(listen="0.0.0.0", port=int(PORT), url_path=TOKEN)
+    updater.bot.setWebhook("https://{}.herokuapp.com/{}".format(NAME, TOKEN))
     updater.start_polling()
     updater.idle()
 
