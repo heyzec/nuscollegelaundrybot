@@ -43,6 +43,7 @@ def build_menu(buttons, n_cols, header_buttons=None, footer_buttons=None):
 ebluediamond = emojize(":small_blue_diamond: ", use_aliases=True)
 etick = emojize(":white_check_mark: ", use_aliases=True)
 ecross = emojize(":x: ", use_aliases=True)
+ealmostdone = emojize (":hourglass_flowing_sand:", use_aliases=True)
 
 # start command initializes: 
 def check_handler(bot, update, user_data):
@@ -78,7 +79,12 @@ def make_status_text(level_number):
     floor_url = RC_URL + str(level_number)
     machine_status = requests.get(floor_url).json()
     for machine_id in MACHINES_INFO:
-        status_emoji = etick if machine_status[machine_id] else ecross
+        if (machine_status[machine_id] == 0):
+          status_emoji = etick
+        elif (machine_status[machine_id] == 1):
+          status_emoji = ecross
+        else:
+          status_emoji = ealmostdone
         machine_name = MACHINES_INFO[machine_id]
         laundry_data += '{} {}\n'.format(status_emoji, machine_name)
     current_time = datetime.now().strftime('%d %B %Y %H:%M:%S')
