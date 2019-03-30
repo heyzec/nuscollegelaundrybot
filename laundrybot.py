@@ -80,8 +80,8 @@ def make_status_text(level_number):
             status_emoji = esoon
         machine_name = MACHINES_INFO[machine_id]
         laundry_data += '{} {}\n'.format(status_emoji, machine_name)
-            
-    current_time = datetime.fromtimestamp(time.time()).strftime('%d %B %Y %H:%M:%S')
+
+    current_time = datetime.fromtimestamp(time.time() + 8*3600).strftime('%d %B %Y %H:%M:%S')
 
     return "<b>Showing Statuses for Level {}</b>:\n\n" \
            "{}\n" \
