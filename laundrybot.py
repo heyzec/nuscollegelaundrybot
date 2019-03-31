@@ -49,7 +49,7 @@ def check_handler(bot, update, user_data):
         ask_level(bot, update)
 
 def ask_level(bot, update):  
-    level_text = "Heyyo! I am RC4's Laundry Bot.\n\n<b>Which laundry level do you wish to check?</b>"
+    level_text = "Heyyo! I am RC4's Laundry Bot. <i>As I am in [BETA] mode, I can only show details for Ursa floor.</i>\n\n<b>Which laundry level do you wish to check?</b>"
     level_buttons = []
     for level in LAUNDRY_LEVELS:
         label = 'Level {}'.format(level)
@@ -83,6 +83,7 @@ def make_status_text(level_number):
 
     current_time = datetime.fromtimestamp(time.time() + 8*3600).strftime('%d %B %Y %H:%M:%S')
     help_text = "<b>Help</b>:\n" + "Washer 2 and Dryer 1 accept coins\n" + etick + "= Available / Job done\n" + esoon + "= Job finishing soon\n" + ecross + "= In use\n"
+    help_text += "Information not accurate or faced a problem? Please contact @Cpf05, thank you!\n"
 
     return "<b>Showing statuses for Level {}</b>:\n\n" \
            "{}\n" \
