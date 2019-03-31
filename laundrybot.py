@@ -82,9 +82,9 @@ def make_status_text(level_number):
         laundry_data += '{} {}\n'.format(status_emoji, machine_name)
 
     current_time = datetime.fromtimestamp(time.time() + 8*3600).strftime('%d %B %Y %H:%M:%S')
-    help_text = "Help: " + etick + "= Available / Job done; " + esoon + "= Job finishing soon; " + ecross + "= In use;\n"
+    help_text = "<b>Help</b>:\n" + "Washer 2 and Dryer 1 accept coins\n" + etick + "= Available / Job done\n" + esoon + "= Job finishing soon\n" + ecross + "= In use\n"
 
-    return "<b>Showing statuses for Level {} from left to right</b>:\n\n" \
+    return "<b>Showing statuses for Level {}</b>:\n\n" \
            "{}\n" \
            "{}\n" \
            "Last updated: {}\n".format(level_number, laundry_data, help_text, current_time)
