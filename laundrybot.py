@@ -1,3 +1,5 @@
+# Laundry Bot for RC4, current telegram handle: @RC4LaundryBot
+
 import os
 import re
 import logging
