@@ -138,7 +138,7 @@ def level_status(bot, update, user_data, from_pinned_level=False, new_message=Fa
 def help_menu(bot, update, user_data, from_pinned_level=False, new_message=False):
     query = update.callback_query
     help_text = "<b>Help</b>\n\n" + "Washer 1 and Dryer 2 accept coins\n" + etick + "= Available / Job done\n" + esoon + "= Job finishing soon\n" + ecross + "= In use\n"
-    help_text += "\nInformation not accurate or faced a problem? Please contact @PakornUe or @Cpf05, thank you!\n"
+    help_text += "\nInformation not accurate or faced a problem? Please message @PakornUe or @Cpf05, thank you!"
     help_text += "\n\nThis is a project by RC4Space's Laundry Bot Team. We appreciate your feedback as we are currently still beta-testing in Ursa before launching the college-wide implementation! :)"
     
     level = user_data['check_level']
