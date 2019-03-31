@@ -49,7 +49,7 @@ def check_handler(bot, update, user_data):
         ask_level(bot, update)
 
 def ask_level(bot, update):  
-    level_text = "Heyyo! I am RC4's Laundry Bot. <i>As I am in [BETA] mode, I can only show details for Ursa floor.</i>\n\n<b>Which laundry level do you wish to check?</b>"
+    level_text = "Heyyo! I am RC4's Laundry Bot. <i>As I am currently in [BETA] mode, I can only show details for Ursa floor.</i>\n\n<b>Which laundry level do you wish to check?</b>"
     level_buttons = []
     for level in LAUNDRY_LEVELS:
         label = 'Level {}'.format(level)
@@ -82,13 +82,10 @@ def make_status_text(level_number):
         laundry_data += '{} {}\n'.format(status_emoji, machine_name)
 
     current_time = datetime.fromtimestamp(time.time() + 8*3600).strftime('%d %B %Y %H:%M:%S')
-    help_text = "<b>Help</b>:\n" + "Washer 2 and Dryer 1 accept coins\n" + etick + "= Available / Job done\n" + esoon + "= Job finishing soon\n" + ecross + "= In use\n"
-    help_text += "Information not accurate or faced a problem? Please contact @Cpf05, thank you!\n"
 
     return "<b>Showing statuses for Level {}</b>:\n\n" \
            "{}\n" \
-           "{}\n" \
-           "Last updated: {}\n".format(level_number, laundry_data, help_text, current_time)
+           "Last updated: {}\n".format(level_number, laundry_data, current_time)
 
 def make_status_menu(level_number):
     level_buttons = []
@@ -108,7 +105,12 @@ def make_status_menu(level_number):
         callback_data='check_L{}'.format(level_number)
     )]
 
-    return build_menu(level_buttons, 5, footer_buttons=refresh_button)
+    help_button = [InlineKeyboardButton(
+        text='Help',
+        callback_data='Help'
+    )]
+
+    return build_menu(level_buttons, 5, footer_buttons=refresh_button, header_buttons=help_button)
 
 def level_status(bot, update, user_data, from_pinned_level=False, new_message=False):
     query = update.callback_query
@@ -129,7 +131,27 @@ def level_status(bot, update, user_data, from_pinned_level=False, new_message=Fa
                               message_id=query.message.message_id,
                               reply_markup=make_status_menu(level),
                               parse_mode=ParseMode.HTML)  
-        
+
+
+def help_menu(bot, update, user_data, from_pinned_level=False, new_message=False):
+    query = update.callback_query
+    help_text = "<b>Help</b>:\n" + "Washer 1 and Dryer 4 accept coins\n" + etick + "= Available / Job done\n" + esoon + "= Job finishing soon\n" + ecross + "= In use\n"
+    help_text += "Information not accurate or faced a problem? Please contact @Cpf05, thank you!\n"
+    
+    level = user_data['check_level']
+
+    help_menu_button = [InlineKeyboardButton(
+        text='Back',
+        callback_data='check_L{}'.format(level)
+    )]
+
+    bot.edit_message_text(text=help_text,
+                            chat_id=query.message.chat_id,
+                            message_id=query.message.message_id,
+                            reply_markup=build_menu(help_menu_button, 1),
+                            parse_mode=ParseMode.HTML)  
+
+
 def error(bot, update, error):
     logger.warning('Update "%s" caused error "%s"', update, error)
 
@@ -147,6 +169,9 @@ def main():
                                         pass_user_data=True))
     dp.add_handler(CallbackQueryHandler(level_status,
                                         pattern='^check_L(5|8|11|14|17)$',
+                                        pass_user_data=True))
+    dp.add_handler(CallbackQueryHandler(help_menu,
+                                        pattern='Help',
                                         pass_user_data=True))
     dp.add_error_handler(error)
 
