@@ -43,7 +43,6 @@ esoon = emojize(":soon: ", use_aliases=True)
 # start command initializes: 
 def check_handler(bot, update, user_data):
     user = update.message.from_user
-    logger.info("User: {} has started conversation with bot.".format(user.username if user.username else user.first_name))
     if 'pinned_level' in user_data:
         level_status(bot, update, user_data,
                      from_pinned_level=True, new_message=True)
