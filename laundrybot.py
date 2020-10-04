@@ -68,10 +68,14 @@ def set_pinned_level(bot, update, user_data):
 
     level_status(bot, update, user_data, from_pinned_level=True)
 
+# Carves the status text for each level
 def make_status_text(level_number):
     laundry_data = ''
     floor_url = RC_URL + str(level_number)
+
+    # Get Request to the database backend
     machine_status = requests.get(floor_url).json()
+
     for machine_id in MACHINES_INFO:
         if machine_status[machine_id] == 0:
             status_emoji = etick
@@ -82,12 +86,14 @@ def make_status_text(level_number):
         machine_name = MACHINES_INFO[machine_id]
         laundry_data += '{} {}\n'.format(status_emoji, machine_name)
 
+    # TODO: This should be the backend server time instead
     current_time = datetime.fromtimestamp(time.time() + 8*3600).strftime('%d %B %Y %H:%M:%S')
 
     return "<b>Showing statuses for Level {}</b>:\n\n" \
            "{}\n" \
            "Last updated: {}\n".format(level_number, laundry_data, current_time)
 
+# Create the status menu which contains the help command, a pinned level number, and refresh button
 def make_status_menu(level_number):
     level_buttons = []
 
