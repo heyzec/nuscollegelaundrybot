@@ -28,3 +28,8 @@ pip install -r requirements.txt
 ```
 python laundrybot.py
 ```
+
+# Contributors
+- Cai Peng Fei
+- Ryo Armanda
+- Ivander Jonathan
