@@ -33,3 +33,4 @@ python laundrybot.py
 - Cai Peng Fei
 - Ryo Armanda
 - Ivander Jonathan
+- Timotius Jason
