@@ -34,3 +34,4 @@ python laundrybot.py
 - Ryo Armanda
 - Ivander Jonathan
 - Timotius Jason
+- Bui Quang Huy
