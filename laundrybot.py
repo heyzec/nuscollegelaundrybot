@@ -82,33 +82,31 @@ def make_status_menu(level_number: int):
 
 def make_status_text(level_number: int):
     """Carve status text for each level."""
-    laundry_data = ''
-    floor_url = RC_URL + str(level_number)
+    endpoint = f"{RC_URL}/machine?floor={level_number}"
 
     # Get Request to the database backend
-    machine_status = requests.get(floor_url).json()
-    # machine_status = {
-    #     'washer1': 0,
-    #     'washer2': 0,
-    #     'dryer1': 0,
-    #     'dryer2': 0,
-    # }
-
-    for machine_id in MACHINES_INFO:
-        if machine_status[machine_id] == 0:
+    r = requests.get(endpoint)
+    data = r.json()
+    
+    status_output = ""
+    for machine_data in data:
+        if machine_data['status'] == 'idle':
             status_emoji = EMOJI_TICK
-        elif machine_status[machine_id] == 1:
+        elif machine_data['status'] == 'in_use':
             status_emoji = EMOJI_CROSS
-        else:
+        elif machine_data['status'] == 'finishing':
             status_emoji = EMOJI_SOON
-        machine_name = MACHINES_INFO[machine_id]
-        laundry_data += f'{status_emoji} {machine_name}\n'
+        else:
+            status_emoji = ""
+
+        machine_name = f"{machine_data['type']} {machine_data['pos']}".capitalize()
+        status_output += f'{status_emoji} {machine_name}\n'
 
     # TODO: This should be the backend server time instead
     current_time = datetime.fromtimestamp(time.time() + 8*3600).strftime('%d %B %Y %H:%M:%S')
 
     return f"<b>Showing statuses for Level {level_number}</b>:\n\n" \
-           f"{laundry_data}\n" \
+           f"{status_output}\n" \
            f"Last updated: {current_time}\n"
 
 
